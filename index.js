@@ -16,7 +16,7 @@ rtm.start();
 /* setup elasticsearch connection */
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({
-  host: 'elasticsearch:9200',
+  host: process.env.ELASTICSEARCH_HOST,
 });
 
 rtm.on(RTM_EVENTS.MESSAGE, function (message) {
