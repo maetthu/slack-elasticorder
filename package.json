@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Records Slack messages to elasticsearch",
   "author": "Matthias Blaser <git@mooch.ch>",
-  "license": "UNLICENSE",
+  "license": "Unlicense",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
