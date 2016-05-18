@@ -1,0 +1,41 @@
+---
+- hosts: all
+  tasks:
+    # storage container for elasticsearch
+    - name: create storage container for data
+      docker:
+        image: busybox:latest
+        name: slack-elasticorder-data
+        state: present
+        volumes:
+          - /usr/share/elasticsearch/data
+      tags:
+        - slack-elasticorder
+    # elasticsearch container
+    - name: create elasticsearch container
+      docker:
+        image: elasticsearch:2
+        name: slack-elasticorder-elastic
+        state: started
+        volumes_from: slack-elasticorder-data
+        ports:
+          - 0.0.0.0:9200:9200/tcp
+        restart_policy: always
+        pull: always
+      tags:
+        - slack-elasticorder
+    # slack-elasticorder container
+    - name: create slack-elasticorder container
+      docker:
+        image: maetthu/slack-elasticorder
+        name: slack-elasticorder-node
+        state: started
+        restart_policy: always
+        pull: always
+        env:
+            ELASTICSEARCH_HOST: elasticsearch:9200
+            SLACK_API_TOKEN: "{{ SLACK_API_TOKEN }}"
+        links:
+            - "slack-elasticorder-elastic:elasticsearch"
+      tags:
+        - slack-elasticorder
