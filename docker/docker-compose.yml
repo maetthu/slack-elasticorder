@@ -2,9 +2,11 @@ version: '2'
 services:
   elasticsearch:
     image: elasticsearch:2
-    ports: 
-      - "9200:9200"
-#  node:
-#    build: ./node
-#    depends_on:
-#      - elasticsearch
+    ports:
+        - "9200:9200"
+  node:
+    build: ../
+    environment:
+        - SLACK_API_TOKEN
+    depends_on:
+      - elasticsearch
