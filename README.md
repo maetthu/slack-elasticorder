@@ -5,9 +5,9 @@ Simple node.js daemon dumping Slack messages to Elasticsearch, aka
 
 To not appear as online all the time (without waiting for the auto-away idle
 timeout of 30 minutes), the daemon manually sets the user to "away" when no other
-client is connected for this same user. 
+client is connected for this same user.
 
-# Usage
+## Usage
 
 ```
 SLACK_API_TOKEN="YOUR-TOKEN" ELASTICSEARCH_HOST="HOST:PORT" npm start
@@ -25,12 +25,12 @@ for a way to deploy with ansible. The API token can be supplied as
 ansible-playbook -e SLACK_API_TOKEN=YOUR-TOKEN slack-elasticorder.yml
 ```
 
-# Limitations
+## Limitations
 
 The messages are dumped into Elasticsearch as returned from the Slack API and
 do not contain file attachments, just URL references to the files on Slack.
 Attachments are not (yet) archived locally.
 
-# License
+## License
 
 This project is licensed under [The Unlicense](http://unlicense.org).
