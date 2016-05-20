@@ -1,6 +1,7 @@
 
 /* setup slack connection */
 var RtmClient = require('@slack/client').RtmClient;
+var WebClient = require('@slack/client').WebClient;
 var MemoryDataStore = require('@slack/client').MemoryDataStore;
 var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
@@ -11,6 +12,7 @@ var rtm = new RtmClient(token, {
     autoReconnect: true,
     autoMark: false
 });
+var web = new WebClient(token);
 
 rtm.start();
 
@@ -61,6 +63,43 @@ rtm.on(RTM_EVENTS.MESSAGE, function (message) {
         }
     );
 });
+
+/* monitor online presence, setting user to away if this is the only client left */
+var presenceMonitor;
+
+function checkPresence(){
+    web.users.getPresence().then(
+        function(user){
+            if(user.presence != 'away'){
+                if(user.connection_count == 1){
+                    web.users.setPresence('away').then(
+                        function(){
+                            console.log("[Slack] I'm all alone now. Setting presence to away.");
+                            presenceMonitor && clearInterval(presenceMonitor);
+                        },
+                        function(error){
+                            console.log(error);
+                        }
+                    );
+                } else if (!presenceMonitor) {
+                    console.log("[Slack] I'm online but not alone, start monitoring");
+
+                    presenceMonitor = setInterval(function(){
+                        checkPresence();
+                    }, 30000);
+                }
+            }
+        }
+    );
+}
+
+rtm.on(RTM_EVENTS.PRESENCE_CHANGE, function(presence){
+    if(presence.user == rtm.activeUserId){
+        if(presence.presence == 'active'){
+            checkPresence();
+        }
+    }
+})
 
 rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function(){
     var user = rtm.dataStore.getUserById(rtm.activeUserId);
