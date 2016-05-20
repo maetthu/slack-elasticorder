@@ -101,7 +101,7 @@ rtm.on(RTM_EVENTS.PRESENCE_CHANGE, function(presence){
     if(presence.user == rtm.activeUserId && presence.presence == 'active'){
         checkPresence();
     }
-})
+});
 
 rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function(){
     var user = rtm.dataStore.getUserById(rtm.activeUserId);
@@ -114,8 +114,8 @@ rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function(){
 rtm.on(CLIENT_EVENTS.RTM.DISCONNECT, function(){
     console.error('[Slack] Could not reconnect to Slack, exiting');
     process.exit(1);
-})
+});
 
 rtm.on(CLIENT_EVENTS.RTM.ATTEMPTING_RECONNECT, function(){
     console.error('[Slack] Connection to Slack lost, reconnecting...');
-})
+});
