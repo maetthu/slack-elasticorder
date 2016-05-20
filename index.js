@@ -28,7 +28,7 @@ client.ping().then(
     },
     function(error){
         console.error('[Elasticsearch] Could not contact server, error was:');
-        console.log(error);
+        console.error(error);
         console.error('... exiting');
         process.exit(1);
     }
@@ -59,7 +59,7 @@ rtm.on(RTM_EVENTS.MESSAGE, function (message) {
         },
         function(error){
             console.error('[Elasticsearch] could not record message, error was:');
-            console.log(error);
+            console.error(error);
         }
     );
 });
@@ -98,10 +98,8 @@ function checkPresence(){
 }
 
 rtm.on(RTM_EVENTS.PRESENCE_CHANGE, function(presence){
-    if(presence.user == rtm.activeUserId){
-        if(presence.presence == 'active'){
-            checkPresence();
-        }
+    if(presence.user == rtm.activeUserId && presence.presence == 'active'){
+        checkPresence();
     }
 })
 
@@ -109,15 +107,15 @@ rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function(){
     var user = rtm.dataStore.getUserById(rtm.activeUserId);
     var team = rtm.dataStore.getTeamById(rtm.activeTeamId);
 
-    console.log('[Slack] Connected to ' + team.name + ' as ' + user.name);
+    console.log('[Slack] Connected to %s as %s', team.name, user.name);
     console.log('[Slack] Ready when you are...');
 });
 
 rtm.on(CLIENT_EVENTS.RTM.DISCONNECT, function(){
-    console.log('[Slack] Could not reconnect to Slack, exiting');
+    console.error('[Slack] Could not reconnect to Slack, exiting');
     process.exit(1);
 })
 
 rtm.on(CLIENT_EVENTS.RTM.ATTEMPTING_RECONNECT, function(){
-    console.log('[Slack] Connection to Slack lost, reconnecting...');
+    console.error('[Slack] Connection to Slack lost, reconnecting...');
 })
