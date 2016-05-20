@@ -74,8 +74,12 @@ function checkPresence(){
                 if(user.connection_count == 1){
                     web.users.setPresence('away').then(
                         function(){
-                            console.log("[Slack] I'm all alone now. Setting presence to away.");
-                            presenceMonitor && clearInterval(presenceMonitor);
+                            console.log("[Slack] I'm all alone now. Setting presence to away");
+
+                            if(presenceMonitor){
+                                clearInterval(presenceMonitor);
+                                presenceMonitor = null;
+                            }
                         },
                         function(error){
                             console.log(error);
