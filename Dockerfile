@@ -5,7 +5,7 @@ RUN mkdir -p /srv/app
 WORKDIR /srv/app
 
 # copy source
-COPY index.js package.json /srv/app/
+COPY index.js package.json npm-shrinkwrap.json /srv/app/
 # build
 RUN npm install
 

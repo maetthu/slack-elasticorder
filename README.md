@@ -13,8 +13,8 @@ client is connected for this same user.
 SLACK_API_TOKEN="YOUR-TOKEN" ELASTICSEARCH_HOST="HOST:PORT" npm start
 ```
 
-Check docker directory for using it with docker-compose to setup the complete
-stack, there's also a ready built public docker image
+Check docker-compose.yml to setup the complete stack using docker, there's also
+a ready built public docker image 
 [maetthu/slack-elasticorder](https://hub.docker.com/r/maetthu/slack-elasticorder/)
 for the node part.
 

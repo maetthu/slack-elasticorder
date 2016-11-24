@@ -5,7 +5,7 @@ services:
     ports:
         - "9200:9200"
   node:
-    build: ../
+    build: ./
     environment:
         - ELASTICSEARCH_HOST=elasticsearch:9200
         - SLACK_API_TOKEN
