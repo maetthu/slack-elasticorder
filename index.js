@@ -93,6 +93,9 @@ function checkPresence(){
                     }, 30000);
                 }
             }
+        },
+        function(error){
+            console.error(error);
         }
     );
 }
@@ -109,6 +112,15 @@ rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function(){
 
     console.log('[Slack] Connected to %s as %s', team.name, user.name);
     console.log('[Slack] Ready when you are...');
+
+    if(presenceMonitor){
+        clearInterval(presenceMonitor);
+        presenceMonitor = null;
+    }
+
+    presenceMonitor = setInterval(function(){
+        checkPresence();
+    }, 5000);
 });
 
 rtm.on(CLIENT_EVENTS.RTM.DISCONNECT, function(){
